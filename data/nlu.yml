@@ -1,10 +1,16 @@
 version: "2.0"
 
 nlu:
-- intent: qa
+- intent: knowledge_question
   examples: |
-    - query
-    - question
+    - Can you look this up: what is ?
+    - Look this up: what is?
+    - Can you check: what is?
+    - please check: What is ?
+    - Can you look this up: where is ?
+    - Look this up: where is?
+    - Can you check: where is?
+    - please check: where is ?
 
 - intent: greet
   examples: |

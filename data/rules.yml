@@ -2,10 +2,11 @@ version: "2.0"
 
 rules:
 
-- rule: Query Haystack anytime the user has a query
+- rule: Query Haystack anytime the user has a direct question for your document base
   steps:
-  - intent: qa
+  - intent: knowledge_question
   - action: call_haystack
+
 - rule: Say goodbye anytime the user says goodbye
   steps:
   - intent: goodbye
@@ -15,3 +16,8 @@ rules:
   steps:
   - intent: bot_challenge
   - action: utter_iamabot
+
+- rule: Ask the user to rephrase whenever they send a message with low NLU confidence
+  steps:
+    - intent: nlu_fallback
+    - action: call_haystack
