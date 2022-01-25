@@ -1,6 +1,6 @@
 # Rasa Haystack Demo
 
-
+> Note: this project assumes Rasa Version 2.x. 
 
 This repo is a bare-bones chat bot project using [Rasa](https://rasa.com/) in combination with [Haystack](https://github.com/deepset-ai/haystack). While Rasa is used for the whole flow of the dialogue and intent management, Haystack is used to answer the long tail of "knowledge queries" that can be answered by searching an answer in a document corpus. This example repo sketches how to use the _fallback intent_ or an dedicated _knowledge base intent_ to offload such queries to haystack.
 
