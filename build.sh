@@ -1,6 +1,6 @@
 #!/bin/sh
 # Build action server image
-VERS=1.0.0
+VERS=3.3.0
 REGISTRY=stephens
 IMAGE=haystack-action
 

@@ -10,7 +10,10 @@ from typing import Any, Text, Dict, List
 from rasa_sdk import Action, Tracker
 from rasa_sdk.executor import CollectingDispatcher
 import requests
+import json
+import logging
 
+logger = logging.getLogger(__name__)
 
 class ActionHaystack(Action):
 
@@ -22,14 +25,27 @@ class ActionHaystack(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
 
         url = "http://localhost:8000/query"
-        payload = {"query": str(tracker.latest_message["text"])}
+        # params={'filters': {}, 'Retriever': {'top_k': 3}, 'Reader': {'top_k': 3}, 'Query': {'debug': False}}
+        payload = {
+            "query": str(tracker.latest_message["text"]),
+            "params":{"filters": {}, "Retriever": {"top_k": 3}, "Reader": {"top_k": 3}, "Query": {"debug": False}}
+        }
         headers = {
             'Content-Type': 'application/json'
         }
-        response = requests.request("POST", url, headers=headers, json=payload).json()
+
+        logger.debug(f"Calling {url}, ask: {str(tracker.latest_message['text'])}")
+        try:
+            response = requests.request("POST", url, headers=headers, json=payload).json()
+        except requests.exceptions.RequestException as e:
+            response = {"answers":[{"answer":"Haystack service not responding"}]}
 
         if response["answers"]:
+            logger.debug(f"answers {response}")
             answer = response["answers"][0]["answer"]
+            if not answer:
+                answer = response["answers"][1]["answer"]
+            logger.debug(f"selected answer: {answer}")
         else:
             answer = "No Answer Found!"
 
