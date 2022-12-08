@@ -9,7 +9,8 @@ from typing import Any, Text, Dict, List
 
 from rasa_sdk import Action, Tracker
 from rasa_sdk.executor import CollectingDispatcher
-import requests
+import aiohttp
+import asyncio
 import json
 import logging
 
@@ -20,7 +21,7 @@ class ActionHaystack(Action):
     def name(self) -> Text:
         return "call_haystack"
 
-    def run(self, dispatcher: CollectingDispatcher,
+    async def run(self, dispatcher: CollectingDispatcher,
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
 
@@ -36,9 +37,12 @@ class ActionHaystack(Action):
 
         logger.debug(f"Calling {url}, ask: {str(tracker.latest_message['text'])}")
         try:
-            response = requests.request("POST", url, headers=headers, json=payload).json()
-        except requests.exceptions.RequestException as e:
-            response = {"answers":[{"answer":"Haystack service not responding"}]}
+            async with aiohttp.ClientSession() as session:
+                async with session.post(url, headers=headers, json=payload) as response:
+                    response = response.json()
+        except aiohttp.ClientConnectorError as e:
+            logger.error(f"Haystack service not responding: {str(e)}")
+            response = {"answers":[{"answer":f"Haystack service not responding: {str(e)}"}]}
 
         if response["answers"]:
             logger.debug(f"answers {response}")
