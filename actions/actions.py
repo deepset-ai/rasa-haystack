@@ -44,7 +44,7 @@ class ActionHaystack(Action):
             response = {"answers":[{"answer":f"Haystack service not responding: {str(e)}"}]}
 
         if response["answers"]:
-            logger.debug(f"answers {response}")
+            logger.debug(f"Answers returned by haystack:\n{response}")
             answer = response["answers"][0]["answer"]
             if not answer:
                 answer = response["answers"][1]["answer"]
