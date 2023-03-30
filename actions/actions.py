@@ -25,7 +25,6 @@ class ActionHaystack(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
 
         url = "http://localhost:8000/query"
-        # params={'filters': {}, 'Retriever': {'top_k': 3}, 'Reader': {'top_k': 3}, 'Query': {'debug': False}}
         payload = {
             "query": str(tracker.latest_message["text"]),
             "params":{"filters": {}, "Retriever": {"top_k": 3}, "Reader": {"top_k": 3}, "Query": {"debug": False}}
