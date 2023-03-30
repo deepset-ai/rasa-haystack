@@ -1,5 +1,5 @@
 FROM rasa/rasa-sdk:3.3.0
-ENV TZ=Americas/Los_Angeles
+ENV TZ=Etc/UTC
 
 COPY actions /app/actions
 
