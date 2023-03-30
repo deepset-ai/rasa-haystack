@@ -38,7 +38,7 @@ class ActionHaystack(Action):
         try:
             async with aiohttp.ClientSession() as session:
                 async with session.post(url, headers=headers, json=payload) as response:
-                    response = response.json()
+                    response = await response.json()
         except aiohttp.ClientConnectorError as e:
             logger.error(f"Haystack service not responding: {str(e)}")
             response = {"answers":[{"answer":f"Haystack service not responding: {str(e)}"}]}
